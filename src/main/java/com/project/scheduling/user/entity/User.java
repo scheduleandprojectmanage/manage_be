@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -33,6 +34,9 @@ public class User extends BaseEntity {
     @NotBlank(message = "이름은 필수입니다")
     private String name;
 //    private String provider; //자사 가입인지, 소셜 회원인지 구분
+
+    @OneToMany(mappedBy = "user")
+    private List<ProjectUserMapping> projectUserMappings;
 
     public static User createUser(String name, String email, String password) {
         return User.builder()
