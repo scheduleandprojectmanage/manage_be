@@ -1,5 +1,7 @@
 package com.project.scheduling.user.controller;
 
+import com.project.scheduling.common.util.JwtToken;
+import com.project.scheduling.user.dto.LogInRequestDto;
 import com.project.scheduling.user.dto.UserSignUpRequestDto;
 import com.project.scheduling.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,24 @@ public class UserController {
 
     private final UserService userService;
 
-    /** 회원가입 */
+    /**
+     * 회원가입
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserSignUpRequestDto userSignUpRequestDto) {
         userService.save(userSignUpRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입에 성공했습니다.");
     }
 
+    /**
+     * 로그인
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LogInRequestDto request) {
+        JwtToken tokens = userService.login(request);
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + tokens.getAccessToken())
+                .header("Refresh-Token", "Bearer " + tokens.getRefreshToken())
+                .body(tokens);
+    }
 }

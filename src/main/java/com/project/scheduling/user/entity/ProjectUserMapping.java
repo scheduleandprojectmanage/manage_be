@@ -36,9 +36,10 @@ public class ProjectUserMapping {
   @JoinColumn(name = "userId", nullable = false)
   private User users;
 
-  @OneToMany(mappedBy = "project_user_mapping_id")
+  @OneToMany(mappedBy = "projectUserMapping")
   private List<ScheduleBoard> schedulesBoards;
-  @OneToMany(mappedBy = "project_user_mapping_id")
+
+  @OneToMany(mappedBy = "projectUserMapping")
   private List<Schedule> schedules;
 
   @Enumerated(EnumType.STRING)

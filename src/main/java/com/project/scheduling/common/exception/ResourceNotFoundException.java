@@ -1,4 +1,4 @@
-package com.project.scheduling.exception;
+package com.project.scheduling.common.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 
