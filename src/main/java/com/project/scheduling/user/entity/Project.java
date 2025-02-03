@@ -30,7 +30,7 @@ public class Project {
   private LocalDate start;
   private LocalDate end;
 
-  @OneToMany(mappedBy = "project")
+  @OneToMany(mappedBy = "projects")
   private List<ProjectUserMapping> projectUserMappings;
 
 }
