@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:8.0.33
+    environment:
+      MYSQL_ROOT_PASSWORD: 1a2b3c4d*
+      MYSQL_DATABASE: schedule_manage
+      MYSQL_USER: test
+      MYSQL_PASSWORD: 1a2b3c4d*
+    ports:
+      - '3306:3306'
+    tty: true
+    volumes:
+      - ./mysqldb:/var/lib/mysql
+    user: mysql
