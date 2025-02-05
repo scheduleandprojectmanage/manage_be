@@ -1,5 +1,8 @@
 package com.project.scheduling.common.config;
 
+//import com.project.scheduling.user.oauth.CustomOAuth2UserService;
+import com.project.scheduling.user.oauth.OAuth2FailureHandler;
+import com.project.scheduling.user.oauth.OAuth2SuccessHandler;
 import com.project.scheduling.user.security.JwtAuthenticationFilter;
 import com.project.scheduling.common.util.JwtTokenProvider;
 import com.project.scheduling.user.security.JwtExceptionFilter;
@@ -26,7 +29,10 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
-
+//    private final CustomOAuth2UserService customOAuthService;
+    private final OAuth2SuccessHandler successHandler;
+    private final OAuth2FailureHandler failureHandler;
+    private static final String PERMITTED_ROLES[] = {"USER", "ADMIN"};
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -58,6 +64,12 @@ public class SecurityConfig {
         http.csrf((auth) -> auth.disable()) //csrf disable
                 .formLogin((auth) -> auth.disable()) //form 로그인방식 disable
                 .httpBasic((auth) -> auth.disable()) //http basic 인증방식 disable
+                .oauth2Login(customConfigurer -> customConfigurer
+                        .successHandler(successHandler)
+                        .failureHandler(failureHandler)
+//                        .userInfoEndpoint(endpointConfig ->
+//                                endpointConfig.userService(customOAuthService))
+                )
                 .authorizeHttpRequests((auth) -> auth //경로 별 인가 작업
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/user/signup").permitAll()
