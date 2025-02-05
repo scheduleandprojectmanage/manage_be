@@ -11,6 +11,12 @@ public enum ExceptionEnum {
     TOKEN_MISMATCH("토큰 정보가 일치하지 않습니다", HttpStatus.UNAUTHORIZED),
     TOKEN_NOT_FOUND("토큰이 존재하지 않습니다", HttpStatus.UNAUTHORIZED),
 
+    // 회원 관련 예외
+    MEMBER_NOT_FOUND("존재하지 않는 회원입니다", HttpStatus.NOT_FOUND),
+    DUPLICATE_EMAIL("이미 존재하는 이메일입니다", HttpStatus.CONFLICT),
+    INVALID_PASSWORD("비밀번호가 일치하지 않습니다", HttpStatus.BAD_REQUEST),
+    OAUTH_PROCESSING_ERROR("OAuth 처리 중 오류가 발생했습니다", HttpStatus.BAD_REQUEST),
+
     // 리소스 관련 예외
     RESOURCE_NOT_FOUND("요청한 리소스를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
 

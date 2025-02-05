@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -33,7 +35,16 @@ public class User extends BaseEntity {
 
     @NotBlank(message = "이름은 필수입니다")
     private String name;
-//    private String provider; //자사 가입인지, 소셜 회원인지 구분
+
+    @NotNull
+    private String identifier;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private ProviderInfo providerInfo; //자사 가입인지, 소셜 회원인지 구분
 
     @OneToMany(mappedBy = "users")
     private List<ProjectUserMapping> projectUserMappings;
