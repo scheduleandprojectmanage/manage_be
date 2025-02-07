@@ -74,6 +74,13 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/user/signup").permitAll()
                         .requestMatchers("/user/login").permitAll()
+                    .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/oauth2/authorization/naver",
+                                        "/login/oauth2/code/naver"
+                                    ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
 
                         /*// 모두 허용
