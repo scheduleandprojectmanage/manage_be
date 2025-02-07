@@ -10,6 +10,7 @@ import com.project.scheduling.user.entity.ScheduleBoard;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,33 +34,46 @@ public class ScheduleBoardService {
 
   public ScheduleBoard createScheduleBoard(ScheduleBoardCreateRequest board) {
 
-    ProjectUserMapping projectUserMapping = projectUserMappingRepository.findById(
-            board.getProjectUserMapping())
-        .orElseThrow(() -> new IllegalArgumentException("해당 정보가 없음"));
+    ProjectUserMapping mapping = verificationMapping(board.getProjectUserMapping());
 
-      ScheduleBoard schedule = ScheduleBoard.builder()
-          .title(board.getTitle())
-          .content(board.getContent())
-          .start(board.getStart())
-          .end(board.getEnd())
-          .state(board.getState())
-          .projectUserMapping(projectUserMapping)
-          .build();
-      return scheduleBoardRepository.save(schedule);
+    ScheduleBoard schedule = ScheduleBoard.builder()
+        .title(board.getTitle())
+        .content(board.getContent())
+        .start(board.getStart())
+        .end(board.getEnd())
+        .state(board.getState())
+        .projectUserMapping(mapping)
+        .build();
+    return scheduleBoardRepository.save(schedule);
 
   }
 
   public ScheduleBoard updateScheduleBoard(ScheduleBoardUpdateRequest board) {
-    ProjectUserMapping projectUserMapping = projectUserMappingRepository.findById(
-            board.getProjectUserMapping())
-        .orElseThrow(() -> new IllegalArgumentException("접근 권한이 없음"));
+    verificationMapping(board.getProjectUserMapping());
 
     ScheduleBoard scheduleBoard = scheduleBoardRepository.findById(board.getId())
         .orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다"));
 
     scheduleBoard.update(board.getTitle(), board.getContent(), board.getStart(),
-                         board.getEnd(), board.getState());
+        board.getEnd(), board.getState());
     return scheduleBoardRepository.save(scheduleBoard);
 
   }
+
+  public HttpStatus deleteScheduleBoard(Long mappingId, Long boardId) {
+    verificationMapping(mappingId);
+
+    ScheduleBoard deleteBoard = scheduleBoardRepository.findById(boardId)
+        .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 보드입니다."));
+
+    scheduleBoardRepository.delete(deleteBoard);
+    return HttpStatus.OK;
+  }
+
+  private ProjectUserMapping verificationMapping(Long mappingId) {
+    return projectUserMappingRepository.findById(mappingId)
+        .orElseThrow(() -> new IllegalArgumentException("접근 권한이 없음"));
+  }
+
 }
+
